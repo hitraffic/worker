@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/worker/worker.git"
+    "url": "https://github.com/hitraffic/worker.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/worker/worker/issues"
+    "url": "https://github.com/hitraffic/worker/issues"
   },
-  "homepage": "https://github.com/worker/worker",
+  "homepage": "https://github.com/hitraffic/worker",
   "dependencies": {
     "pg": "^4.2.0",
     "sequelize": "^2.0.0-rc8"
