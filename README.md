@@ -1,4 +1,6 @@
 # hitraffic-worker
+
+[![Join the chat at https://gitter.im/hitraffic/worker](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hitraffic/worker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Fetches and stores geocoded location data.
 "Work" will provide geo-coordinate data to supplement data provided by Hawaii Open Data for Traffic Incidents, adding the capability to plot map locations.  Data will be stored in a separate database to be utilized by mid and front end developers.
 
