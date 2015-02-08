@@ -1,7 +1,6 @@
 // processIncidents.js
 // processes each incident in incidents JSON object
 // ================================================
-var bodyParser = require('body-parser');
 var request = require('request');
 
 // calls:
@@ -16,13 +15,14 @@ var request = require('request');
 
 // (J) process for each incident (this file)
 
-  // var epocDateTime = ... // pull time from JSON API date
-  var localTime = convertEpocToLocalTime(1234567890);
+  // var epochDateTime = ... // pull time from JSON API date
+  var localTime = convertEpochToLocalTime(1234567890);
   console.log(localTime);
 
-  // validate address with processAddress.js
+  // validate address with processAddress.js:
     // blank location
     // remove X?
+    // add space before and after "&"
 
   var addr = "Antarctica";
 
@@ -42,14 +42,14 @@ var request = require('request');
     }
   });
 
-  //    (A) store incident to db storeIncident.js
+  // (A) store incident to db storeIncident.js
 
 
 // Helper Functions
 // ================
 
-function convertEpocToLocalTime(utcSeconds) {
-  // convert UTC/EPOC to local date/time
+function convertEpochToLocalTime(utcSeconds) {
+  // convert UTC/EPOCH to local date/time
   var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
   d.setUTCSeconds(utcSeconds);
   // d holds the date in your local timezone
