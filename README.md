@@ -5,11 +5,12 @@ Fetches and stores geocoded location data.
 "Work" will provide geo-coordinate data to supplement data provided by Hawaii Open Data for Traffic Incidents, adding the capability to plot map locations.  Data will be stored in a separate database to be utilized by mid and front end developers.
 
 ## Team Members:
+
 A = Andrew
 
 B = Joanne
 
-## Work Modules:
+## Worker Modules:
 
 1) [A] getIncidentData - retrieves JSON data from Traffic API
 
@@ -49,9 +50,9 @@ Production: (TBD)
 
   date: [DATE/TIME]
 
-  code: [INT or code table?]
+  code: [INT]
 
-  type: [STRING or FK to code_index?]
+  type: [STRING]
 
   address: [STRING]
 
@@ -59,12 +60,6 @@ Production: (TBD)
 
   area: [STRING]
 
-  geo_coord: gc_index [FK]
+  lat: [FLOAT]
 
-#### table name: geo_coords
-
-  gc_index: [PK, INT, AUTO]
-
-  col: lat [FLOAT]
-
-  col: lng [FLOAT]
+  lng: [FLOAT]
