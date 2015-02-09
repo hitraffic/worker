@@ -19,22 +19,81 @@ var config = require('./config.json');
 // [1] (A) getIncidentData.js to get JSON data from Traffic API
 
 // var incidents = getIncidents();
+var incidents = [
+  {
+    area: "KANEOHE",
+    location: "PALI TUNNELS D4 S",
+    address: "600X PALI HWY",             // good
+    code: "633",
+    type: "STALLED/HAZARDOUS VEHICLE",
+    date: 1346269607
+  },
+  // {
+  //   area: "HONOLULU",
+  //   location: "H1E AIRPORT OFF",
+  //   address: "16X E H1 FWY",              // fails
+  //   code: "632",
+  //   type: "HAZARDOUS DRIVER",
+  //   date: 1346269492
+  // },
+  {
+    area: "HONOLULU",
+    address: "KILAUEA AVE & WAIALAE AVE", // good, spaces should surround "&"
+    code: "633",
+    type: "STALLED/HAZARDOUS VEHICLE",
+    date: 1346269077
+  },
+  {
+    area: "HONOLULU",
+    address: "HOAWA LN & S KING ST",      // good, spaces should surround "&"
+    code: "550",
+    type: "MOTOR VEHICLE COLLISION",
+    date: 1346268587
+  },
+  {
+    area: "HONOLULU",
+    address: "MAKALOA ST & SHERIDAN ST",  // good, spaces should surround "&"
+    code: "550",
+    type: "MOTOR VEHICLE COLLISION",
+    date: 1346268300
+  }
+];
 
 // [2] (J) process for each incident (this file)
+incidents.forEach(function(incident) {
 
   // [2a] convert stored epoch time to local time
-  // var epochDateTime = ... // pull time from JSON API date
-  // var localTime = convertEpochToLocalTime(epochDateTime);
-  var localTime = convertEpochToLocalTime(0123456789);
+  // TODO: need to actually change incident date
+  // TODO: need to remove day of week and "GMT-1000 (HST)""
+  var epochDateTime = incident.date;
+  var localTime = convertEpochToLocalTime(epochDateTime);
   console.log(localTime);  // sanity check
-  // need to change incident date
 
   // [2b] validate address with processAddress.js (possible issues):
     // blank location - assign to null
     // remove X's? - probably not necessary
     // add space before and after "&" - required
+  var addr = incident.address;
+  console.log(addr);
 
-  var addr = "Antarctica";  // actual address to be extracted from JSON incident
+  // [2c] get geo coordinates from GeoCode API
+  request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // console.log(body); // sanity check
+      var jsonData = JSON.parse(body);
+      // console.log(jsonData); // sanity check
+      console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
+      console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
+    }
+  });
+
+  // [2d] (A) store incident to db storeIncident.js
+
+}); // (J) end forEach()
+
+console.log("============================================");
+
+  // var addr = "MAKALOA ST & SHERIDAN ST";  // actual address to be extracted from JSON incident
 
   // [2c] get geo coordinates from GeoCode API
 
@@ -46,15 +105,15 @@ var config = require('./config.json');
   // console.log("Lng = " + geo_coord.lng);
   
   // not so clean, but works:
-  request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // console.log(body); // sanity check
-      var jsonData = JSON.parse(body);
-      // console.log(jsonData); // sanity check
-      console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
-      console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
-    }
-  });
+  // request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
+  //   if (!error && response.statusCode == 200) {
+  //     // console.log(body); // sanity check
+  //     var jsonData = JSON.parse(body);
+  //     // console.log(jsonData); // sanity check
+  //     console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
+  //     console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
+  //   }
+  // });
 
   // [2d] (A) store incident to db storeIncident.js
 
