@@ -12,22 +12,28 @@ B = Joanne
 
 ## Worker Modules:
 
-1) [A] getIncidentData - retrieves JSON data from Traffic API
+1) [A] getIncidentData - retrieves JSON data from Traffic API (and later, HPD real-time site) and stores them in a database
 
-2) [J] processAddress - prepares valid address
+2) [J] processIncidents - retrieves records from the database
 
-3) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
+    a) [J] fixDate - converts date from epoch to local
 
-4) [A] storeIncidents - inserts incidents with valid geo coordinates to PostgreSQL database
+    b) [J] processAddress - prepares valid address
+
+    c) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
+
+    d) [A] storeIncidents - inserts incidents with valid geo coordinates to the database
+    
+3) [A] getRealTimeData - retrieves JSON data from HPD site and stores them on the database daily, and processed by step 2)
 
 ## API Data:
 incident_number, date, code, type, address, location, area
 
-Source Data: https://data.honolulu.gov/api/views/INLINE/rows.json?accessType=DOWNLOAD
+Source Data: https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD
 
-Notes: 2 hour delay, over 162,000+ records, dates back to Aug 2012
+Notes: 2 hour delay, over 163,000+ records, dates back to Aug 2012
 
-Source Data: http://www4.honolulu.gov/hpdtraffic/
+Source Data: http://www4.honolulu.gov/hpdtraffic/ or https://twitter.com/hpdtraffic
 
 Notes: Real-Time data, requires scrapping (later)
 
@@ -40,11 +46,11 @@ Notes: development using Mac OS X version
 
 Production: (TBD)
 
-### database name: hitraffic (tbd)
+### database name: hitraffic
 
 #### table name: incidents
 
-  index: [PK, INT, AUTO]
+  index: [PK, INT, AUTO INCREMENT, UNIQUE]
 
   number: [INT, over 160,000+]
 
@@ -63,3 +69,5 @@ Production: (TBD)
   lat: [FLOAT]
 
   lng: [FLOAT]
+  
+  Note: postgis.net may provide extensive capability with geography and geometry in the future.
