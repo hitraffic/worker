@@ -18,7 +18,8 @@
   "homepage": "https://github.com/hitraffic/worker",
   "dependencies": {
     "pg": "^4.2.0",
-    "request": "^2.53.0", //added request library via terminal command "npm install request --save"
+    "pg-hstore": "^2.3.1",
+    "request": "^2.53.0",
     "sequelize": "^2.0.0-rc8"
   }
 }
