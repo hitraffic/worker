@@ -11,16 +11,18 @@ B = Joanne
 
 ## Work Modules:
 
-1) [A] getIncidentData - retrieves JSON data from Traffic API
+1) [A] getIncidentData - retrieves data from Traffic API, converts to a JSON object, creates db model for raw data and inserts data.
 
-2) [J] processAddress - prepares valid address
+2) [J] processAddress - retrieves raw data and prepares valid address.
 
 3) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
 
 4) [A] storeIncidents - inserts incidents with valid geo coordinates to PostgreSQL database
 
-## API Data:
-incident_number, date, code, type, address, location, area
+5) [J] processIncidents - main program that will emply the first 4 routines.  will also provide date-time conversion.
+
+## Raw Traffic API Data:
+index, date, code, type, address, location, area
 
 Source Data: https://data.honolulu.gov/api/views/INLINE/rows.json?accessType=DOWNLOAD
 
@@ -39,7 +41,7 @@ Notes: development using Mac OS X version
 
 Production: (TBD)
 
-### database name: hitraffic (tbd)
+### database name: hitraffic
 
 #### table name: incidents
 
@@ -68,3 +70,12 @@ Production: (TBD)
   col: lat [FLOAT]
 
   col: lng [FLOAT]
+
+#### Area
+
+  name: [STRING]
+  
+#### table name: incident_type
+#### table name: location_type
+#### table name: location
+#### table name: incident
