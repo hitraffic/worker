@@ -18,31 +18,20 @@ sequelize
 //getIncidentData.js simply return the object.
 request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', function (error, response, body) {
   if (!error && response.statusCode == 200) {
-     var jsonData = JSON.parse(body); 
-     console.log(jsonData);
-     //console.log(jsonData.data[0][12]);
-     console.log(jsonData.data.length);
-     var dataLength = jsonData.data.length;
-     for (var i = 0; i < dataLength; i++) {
-        console.log("item: "+jsonData.data[i][0]);
-        console.log("date: "+jsonData.data[i][8]);
-        console.log("code: "+jsonData.data[i][9]);
-        console.log("type: "+jsonData.data[i][10]);
-        console.log("address: "+jsonData.data[i][11]);
-        console.log("location: "+jsonData.data[i][12]);
-        console.log("area: "+jsonData.data[i][13]); 
-        console.log("****");     
-     };
-
-    // jsonData.forEach(function(item){
-    //   console.log(item[0][0]);
-      // console.log(item.address);
-      // console.log(item.code);
-      // console.log(item.area);
-      // console.log(item.type);
-      // console.log(item.date);
-      // console.log("****");
-  //   })
+     var jsonData = JSON.parse(body).data;
+     var map = Array.prototype.map;
+     var fixedData = jsonData.map(function(record){
+     return {
+       "item": record[0],
+        "date": record[8],
+        "code": record[9],
+        "type": record[10],
+        "address": record[11],
+        "location": record[12],
+        "area": record[13]
+        }; 
+      });
+     console.log(fixedData);
    }
 });
 
