@@ -63,6 +63,8 @@ Production: (TBD)
 
   geo_coord: gc_index [FK]
 
+#### table name: location
+
 #### table name: geo_coords
 
   gc_index: [PK, INT, AUTO]
@@ -77,5 +79,4 @@ Production: (TBD)
   
 #### table name: incident_type
 #### table name: location_type
-#### table name: location
-#### table name: incident
+
