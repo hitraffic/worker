@@ -14,7 +14,7 @@ var Sequelize = require('sequelize')
     type: Sequelize.STRING,
     address: Sequelize.STRING,
     location: Sequelize.STRING,
-    area: Sequelize.STRING
+    area: Sequelize1.STRING
   });
 
   sequelize
