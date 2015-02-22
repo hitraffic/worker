@@ -3,6 +3,7 @@ var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
 var Sequelize = require('sequelize')
   , sequelize = new Sequelize(config.database, config.username, config.password, config);
+var bodyParser = require('body-parser');
  
 sequelize
   .authenticate()
@@ -14,33 +15,36 @@ sequelize
     }
   })
 
-// getIncidentData.js simply return the object.
-// request('https://data.honolulu.gov/resource/ix32-iw26.json', function (error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//     var dataEnries = JSON.parse(body); 
-//     // console.log(dataEnries);
-//     console.log(dataEnries.length);
-//     dataEnries.forEach(function(item){
-//       console.log(item.location);
-//       console.log(item.address);
-//       console.log(item.code);
-//       console.log(item.area);
-//       console.log(item.type);
-//       console.log(item.date);
-//       console.log("****");
-//     })
-//   }
-// });
+//getIncidentData.js simply return the object.
+request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+     var jsonData = JSON.parse(body); 
+     var dataEntries = jsonData.data;
+     console.log(dataEntries);
+    //  console.log(JSON.parse(body));
+     //console.log(dataEntries.data[0][12]);
+     console.log(dataEntries.data.length);
+    // dataEntries.forEach(function(item){
+    //   console.log(item[0][0]);
+      // console.log(item.address);
+      // console.log(item.code);
+      // console.log(item.area);
+      // console.log(item.type);
+      // console.log(item.date);
+      // console.log("****");
+  //   })
+   }
+});
 
-// function sendRequest (){//Take in parameters: $offset and $limit
-//   request('https://data.honolulu.gov/resource/ix32-iw26.json?', handleResult);
-// }
+function sendRequest (){//Take in parameters: $offset and $limit
+  request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', handleResult);
+}
 
-// function handleResult(error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//     console.log(JSON.parse(body)[]);
-//   }
-// }
+function handleResult(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(JSON.parse(body));
+  }
+}
 
 
 
