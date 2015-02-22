@@ -25,15 +25,15 @@ var Sequelize = require('sequelize')
      } else {
        console.log('It worked!')
          RawIncident
-    .create({
-    item: 1,
-    date: 1346281822,
-    code: 633, 
-    type: "STALLED/HAZARDOUS VEHICLE",
-    address: "600X PALI HWY",
-    location: "PALI TUNNELS D4 S",
-    area: "KANEOHE"
-    })
+          .create({
+          item: 1,
+          date: 1346281822,
+          code: 633, 
+          type: "STALLED/HAZARDOUS VEHICLE",
+          address: "600X PALI HWY",
+          location: "PALI TUNNELS D4 S",
+          area: "KANEOHE"
+          })
     .complete(function(err, incident){
       if(!!err){
         console.log('The instance has not been saved:', err);
@@ -41,8 +41,8 @@ var Sequelize = require('sequelize')
         console.log('Persisted data has been saved');
       }
 
-    });
-     }
+      });
+    }
   })
 
   // RawIncident

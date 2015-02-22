@@ -1,19 +1,18 @@
 var request = require('request');
 var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
-var Sequelize = require('sequelize')
-  , sequelize = new Sequelize(config.database, config.username, config.password, config);
 var bodyParser = require('body-parser');
- 
-sequelize
-  .authenticate()
-  .complete(function(err) {
-    if (!!err) {
-      console.log('Unable to connect to the database:', err)
-    } else {
-      console.log('Connection has been established successfully.')
-    }
-  })
+var Sequelize = require('sequelize'),
+    sequelize = new Sequelize(config.database, config.username, config.password, config);
+var RawIncident = sequelize.define('raw_incident', {
+  item: Sequelize.INTEGER,
+  date: Sequelize.DATE,
+  code: Sequelize.INTEGER,
+  type: Sequelize.STRING,
+  address: Sequelize.STRING,
+  location: Sequelize.STRING,
+  area: Sequelize.STRING
+});
 
 //getIncidentData.js simply return the object.
 request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', function (error, response, body) {
@@ -29,21 +28,42 @@ request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWN
         "address": record[11],
         "location": record[12],
         "area": record[13]
-        }; 
-      });
-     console.log(fixedData);
-   }
-});
+      }; 
+    });
 
-function sendRequest (){//Take in parameters: $offset and $limit
-  request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', handleResult);
-}
 
-function handleResult(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(JSON.parse(body));
+  
+     
+console.log(fixedData);
+sequelize
+  .sync({ force: true }) .complete(function(err) {
+     if (!!err) {
+       console.log('An error occurred while creating the table:', err);
+     } else {
+       console.log('It worked!');
+        RawIncident.bulkCreate(fixedData).success(function(){
+          console.log("Aloha");
+        });
+      }
+    });
   }
-}
+}); 
+// function sendRequest (){//Take in parameters: $offset and $limit
+//   request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', handleResult);
+// }
+
+// function handleResult(error, response, body) {
+//   if (!error && response.statusCode == 200) {
+//     console.log(JSON.parse(body));
+//   }
+// }
+
+
+
+
+
+
+
 
 
 
