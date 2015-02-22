@@ -34,15 +34,16 @@ request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWN
 
   
      
-console.log(fixedData);
+//console.log(fixedData);
 sequelize
   .sync({ force: true }) .complete(function(err) {
      if (!!err) {
        console.log('An error occurred while creating the table:', err);
      } else {
        console.log('It worked!');
-        RawIncident.bulkCreate(fixedData).success(function(){
+        return RawIncident.bulkCreate(fixedData).then(function(){
           console.log("Aloha");
+          return;
         });
       }
     });

@@ -38,7 +38,7 @@ var Sequelize = require('sequelize')
       if(!!err){
         console.log('The instance has not been saved:', err);
       } else {
-        console.log('Persisted data has been saved');
+        console.log('Persisted data has been saved'); 
       }
 
       });
