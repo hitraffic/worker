@@ -7,7 +7,7 @@ var Sequelize = require('sequelize'),
 var RawIncident = sequelize.define('raw_incident', {
   item: Sequelize.INTEGER,
   date: Sequelize.DATE,
-  code: Sequelize.INTEGER,
+  code: Sequelize.STRING,
   type: Sequelize.STRING,
   address: Sequelize.STRING,
   location: Sequelize.STRING,
