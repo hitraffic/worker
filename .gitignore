@@ -3,11 +3,12 @@ save
 data
 notes
 test
+app.js
 
 # Logs
 logs
 *.log
-
+  
 # Runtime data
 pids
 *.pid
@@ -32,3 +33,4 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
