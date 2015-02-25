@@ -7,7 +7,7 @@ var Sequelize = require('sequelize'), sequelize = new Sequelize(config.database,
 var api_incident = sequelize.define('api_incident', {
   item: Sequelize.INTEGER,
   date: Sequelize.DATE,
-  code: Sequelize.INTEGER,
+  code: Sequelize.STRING,
   type: Sequelize.STRING,
   address: Sequelize.STRING,
   location: Sequelize.STRING,

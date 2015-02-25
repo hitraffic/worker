@@ -5,11 +5,13 @@ var request = require('request');
 var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
 var bodyParser = require('body-parser');
+
 console.log(environment);
+
 var Sequelize = require('sequelize'),
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-var RawIncident = sequelize.define('raw_incident', {
+var raw_incident = sequelize.define('raw_incident', {
   item: Sequelize.INTEGER,
   date: Sequelize.DATE,
   code: Sequelize.STRING,
@@ -35,28 +37,27 @@ request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWN
       };
     });
 
-    //console.log(fixedData);
     sequelize
-      .sync({ force: true }).complete(function (err) {
-        if (!err) {
+      .sync({ force: false }).complete(function (err) {
+        if (err) {
           console.log('An error occurred while creating the table:', err);
         } else {
-          console.log('It worked!');
-          return RawIncident.bulkCreate(fixedData).then(function () {
-            console.log("Aloha");
+          console.log('entered bulkCreate()...');
+          return raw_incident.bulkCreate(fixedData).then(function () {
+            console.log("completed bulkCreate()");
             return;
-          });
+          })
+            .complete(function (err, user) {  // user ?
+              if (err) {
+                console.log('The instance has not been saved:', err);
+              } else {
+                console.log('We have a persisted instance now');
+              }
+            });
         }
       });
+    console.log('It worked!');
   }
 });
 
-sequelize
-  .authenticate()
-  .complete(function (err) {
-    if (!!err) {
-      console.log('Unable to connect to the database:', err);
-    } else {
-      console.log('Connection has been established successfully.');
-    }
-  });
+
