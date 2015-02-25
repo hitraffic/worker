@@ -12,9 +12,9 @@ B = Joanne
 
 ## Worker Modules:
 
-1) [A] getIncidentData - retrieves JSON data from Traffic API (and later, HPD real-time site) and stores them in a database
+1) [A] getIncidentData - retrieves data from Traffic API, converts to a JSON object, creates db model for raw data and inserts data.
 
-2) [J] processIncidents - retrieves records from the database
+2) [J] processAddress - retrieves raw data and prepares valid address.
 
     a) [J] fixDate - converts date from epoch to local
 
@@ -26,8 +26,10 @@ B = Joanne
     
 3) [A] getRealTimeData - retrieves JSON data from HPD site and stores them on the database daily, and processed by step 2)
 
-## API Data:
-incident_number, date, code, type, address, location, area
+5) [J] processIncidents - main program that will emply the first 4 routines.  will also provide date-time conversion.
+
+## Raw Traffic API Data:
+index, date, code, type, address, location, area
 
 Source Data: https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD
 
@@ -70,4 +72,14 @@ Production: (TBD)
 
   lng: [FLOAT]
   
-  Note: postgis.net may provide extensive capability with geography and geometry in the future.
+Note: postgis.net may provide extensive capability with geography and geometry in the future.
+
+#### table name: location
+
+#### Area
+
+  name: [STRING]
+  
+#### table name: incident_type
+
+#### table name: location_type
