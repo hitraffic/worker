@@ -2,24 +2,27 @@
 // retrieves raw data from Traffic API
 // converts to JSON data and stores in the hitraffic database
 var request = require('request');
-var environment = process.env.NODE_ENV || "development";
-var config = require('./config.json')[environment];
+// var environment = process.env.NODE_ENV || "development";
+// var config = require('./config.json')[environment];
 var bodyParser = require('body-parser');
+var raw_incident = require('./models/RawIncident.js');
 
 console.log(environment);
 
-var Sequelize = require('sequelize'),
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+// var Sequelize = require('sequelize'),
+//   sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-var raw_incident = sequelize.define('raw_incident', {
-  item: Sequelize.INTEGER,
-  date: Sequelize.DATE,
-  code: Sequelize.STRING,
-  type: Sequelize.STRING,
-  address: Sequelize.STRING,
-  location: Sequelize.STRING,
-  area: Sequelize.STRING
-});
+// var raw_incident = sequelize.define('raw_incident', {
+//   item: Sequelize.INTEGER,
+//   date: Sequelize.DATE,
+//   code: Sequelize.STRING,
+//   type: Sequelize.STRING,
+//   address: Sequelize.STRING,
+//   location: Sequelize.STRING,
+//   area: Sequelize.STRING
+// });
+
+// module.exports = raw_incident;
 
 request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD', function (error, response, body) {
   if (!error && response.statusCode === 200) {

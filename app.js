@@ -8,7 +8,7 @@ var Sequelize = require('sequelize'), sequelize = new Sequelize(config.database,
 var raw_incident = sequelize.define('raw_incident', {
   item: Sequelize.INTEGER,
   date: Sequelize.DATE,
-  code: Sequelize.INTEGER,  // might need to be STRING
+  code: Sequelize.STRING,  // might need to be STRING
   type: Sequelize.STRING,
   address: Sequelize.STRING,
   location: Sequelize.STRING,

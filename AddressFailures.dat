@@ -1,3 +1,14 @@
+⇒  grep \& fullGeoData.dat | wc -l
+  61529
+ ⇒  grep -w KAM ProblemAddresses.dat | wc -l
+  1053
+⇒  grep \/ ProblemAddresses.dat | wc -l
+  948
+⇒  grep \& ProblemAddresses.dat | wc -l
+  413
+⇒  grep -w MOANALUA ProblemAddresses.dat | wc -l
+  84
+
 [
   {
     area: "HONOLULU",
