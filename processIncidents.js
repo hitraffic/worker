@@ -13,10 +13,11 @@
 //
 // ================================================
 var request = require('request');
-var incidents = require('./data/fixedData.dat');
+// var incidents = require('./data/fixedData.dat');
 // var raw_incidents = require('./getIncidentData');
 var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
+var db = require('./models');
 
 // var getIncidents = require('./getIncidentData.js');
 
@@ -1183,45 +1184,114 @@ var config = require('./config.json')[environment];
 //   }
 // ];
 
+// console.log(db);
 // [2] (J) process for each incident (this file)
-incidents.forEach(function(incident) {
+db
+  // .sequelize.sync({force: true})
+  .raw_incident.findAll({ limit: 500, offset: 1000 })
+  // .then(function() {
+    // return raw_incident.findAll({ limit: 10} );
+  // })
+  .then(function(incidents) {
 
-  // [2a] convert stored epoch time to local time
-  // TODO: need to actually change incident date
-  // TODO: need to remove day of week and "GMT-1000 (HST)""
-  var epochDateTime = incident.date;
-  var localTime = convertEpochToLocalTime(epochDateTime);
-  // console.log(localTime);  // sanity check
+    incidents.forEach(function(incident) {
 
-  // [2b] validate address with processAddress.js (possible issues):
-    // blank location - assign to null
-    // remove X's? - probably not necessary
-    // add space before and after "&" - required
-  var addr = incident.address;
-  // console.log(addr);
+      // [2a] convert stored epoch time to local time
+      // TODO: need to actually change incident date
+      // TODO: need to remove day of week and "GMT-1000 (HST)""
+      var epochDateTime = incident.date;
+      var localTime = convertEpochToLocalTime(epochDateTime);
+      // console.log(localTime);  // sanity check
 
-  // [2c] get geo coordinates from GeoCode API
-  request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      try {
-        console.log(addr);  // sanity check
-        // console.log(body); // sanity check
-        var jsonData = JSON.parse(body);
-        // console.log(jsonData); // sanity check
-        console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
-        console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
-      } catch(err) {
-        console.log("***** Problem address: " + addr);
-      }
-    }
-    console.log("============================");
-  });
+      // [2b] validate address with processAddress.js (possible issues):
+        // blank location - assign to null
+        // remove X's? - probably not necessary
+        // add space before and after "&" - required
+      var addr = incident.address;
+      // console.log(addr);
 
-  // [2d] (A) store incident to db storeIncident.js
+      // [2c] get geo coordinates from GeoCode API
+      request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
 
-}); // (J) end forEach()
+          var jsonData = JSON.parse(body);
+          var latitude;
+          var longitude;
+
+          console.log(addr);  // sanity check
+
+          if (jsonData && 
+              jsonData.results[0] &&
+              jsonData.results[0].locations[0] &&
+              jsonData.results[0].locations[0].latLng &&
+              jsonData.results[0].locations[0].latLng.lng && 
+              jsonData.results[0].locations[0].latLng.lat) {
+            console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
+            console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
+            latitude = jsonData.results[0].locations[0].latLng.lat;
+            longitude = jsonData.results[0].locations[0].latLng.lng;
+          } else {
+            console.log("***** Problem address: " + addr);
+            latitude = null;
+            longitude = null;
+          }
+
+          var areaData = {
+              name: incident.area
+            };
+
+          var locationData = {
+              address: addr,
+              lat: latitude,
+              lng: longitude
+              // AreaId : area
+            };
+
+          var incidentTypeData = {
+              name: incident.type,
+              code: incident.code
+            };
+
+          db.Area.findOrCreate({ 
+            where: areaData,
+            defaults: areaData
+          })
+          .then(function(area) {
+            return  db.Location.findOrCreate({
+              where: locationData,
+              defaults: locationData
+            }).then(function(location) {
+              location.setArea(area);
+              return location;
+            });
+          })
+          .then(function(location) {
+            return db.IncidentType.findOrCreate({
+              where: incidentTypeData,
+              defaults: incidentTypeData
+            })
+            .then(function(incidentType) {
+              return db.Incident.create({
+                item: incident.item,
+                date: localTime
+              }).then(function(incident) {
+                incident.setLocation(location);
+                incident.setIncidentType(incidentType);
+                return incident;
+              });
+            });
+          });
+        }
+        console.log("============================");
+      });
+
+      // [2d] (A) store incident to db storeIncident.js
+
+    }); // (J) end forEach()
 
 console.log("============================================");
+
+});
 
   // [2c] get geo coordinates from GeoCode API
   // tester code for single problematic addresses

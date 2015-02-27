@@ -1,6 +1,9 @@
 module.exports = function(sequelize, Sequelize) {
   var Location = sequelize.define('Location', {
-    address: Sequelize.STRING,
+    address: {
+      type: Sequelize.STRING,
+      unique: true
+    },
     lat: Sequelize.FLOAT,
     lng: Sequelize.FLOAT,
   }, {

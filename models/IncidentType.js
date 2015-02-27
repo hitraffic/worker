@@ -1,7 +1,13 @@
 module.exports = function(sequelize, Sequelize) {
   var IncidentType = sequelize.define('IncidentType', {
-    name: Sequelize.STRING,
-    code: Sequelize.INTEGER
+    name: {
+      type: Sequelize.STRING,
+      unique: true
+    },
+    code: {
+      type: Sequelize.INTEGER,
+      unique: true,
+    }
   });
   return IncidentType;
 };
