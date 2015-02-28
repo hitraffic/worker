@@ -1,0 +1,73 @@
+ ⇒  grep -w KAM ProblemAddresses.dat | wc -l
+  1053
+⇒  grep \/ ProblemAddresses.dat | wc -l
+  948
+⇒  grep \& ProblemAddresses.dat | wc -l
+  413
+⇒  grep -w MOANALUA ProblemAddresses.dat | wc -l
+  84
+
+[
+  {
+    area: "HONOLULU",
+    address: "KILAUEA AVE & WAIALAE AVE", // good, spaces should surround "&"
+    code: "633",
+    type: "STALLED/HAZARDOUS VEHICLE",
+    date: 1346269077
+  },
+  {
+    area: "HONOLULU",
+    location: "H1E AIRPORT OFF",
+    address: "16X E H1 FWY",
+    code: "632",
+    type: "HAZARDOUS DRIVER",
+    date: 1346269492
+  }
+]
+
+node processIncidents.js | grep Problem | cut -c 24- | sort | uniq
+
+11X W H1 FWY
+12X E H1 FWY
+13X E H1 FWY
+15X W H1 FWY
+16X W H1 FWY
+20X E H1 FWY
+20X W H1 FWY
+21X W H1 FWY
+22X E H1 FWY
+22X W H1 FWY
+23X E H1 FWY
+25X E H1 FWY
+25X W H1 FWY
+26X E H1 FWY
+57X E H3 FWY
+57X W H3 FWY
+X S H2 FWY
+18X W MOANALUA FWY
+30X W MOANALUA FWY
+33X E MOANALUA FWY
+49004X KAM HWY
+51039X KAM HWY
+53030X KAM HWY
+55040X KAM HWY
+61052X KAM HWY
+71040X KAM HWY
+94038X PUPUPANI ST
+FARRINGTON/POWER PLANT
+H1W PRI H2 SPLIT
+H2N B4 KA UKA
+H3E HALAWA VLY UP
+H3E E HARANO TUNNEL
+H3E W HARANO TUNNEL
+H3W E HARANO TUNNEL
+JOSEPH P LEONG HWY&KAM HWY
+LUNALILO ONTO H1W
+MFW ARIZONA OFF
+MIDDLE ST/E MOANALUA FWY
+KAM HWY&LEHUA AVE
+KAM HWY&MARCONI RD
+KAM HWY&N NIMITZ HWY
+KAM HWY&PALI HWY
+KAM HWY&SALT LAKE BLVD
+KAM HWY&WAIMANO HOME RD
