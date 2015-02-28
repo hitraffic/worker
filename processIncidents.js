@@ -1,40 +1,35 @@
 // processIncidents.js
-// processes each incident in incidents JSON object
-//    -converts stored epoch date to human readable local format
-//    -validates/corrects stored address idiosyncracies for geo code retrieval
+// processes each incident in raw_incidents hitraffic db
+//    -converts raw epoch date to human readable local format
+//    -corrects syntax for raw address for geo code retrieval (some addresses need correcting)
 //    -inserts incident record (complete with converted date/time and additional lat/lng geo coordinates) to db
-//    -data to be retrieved by mid and front end devs
+//    -data to be retrieved by mid and front end devs from db tables: Incidents, Locations, Areas, IncidentTypes
 // 
 // calls:
-//  getIncidentData.js - retrieves JSON data from Traffic API
+//  getIncidentData.js - retrieves data from Traffic API and stores in raw_incidents db
 //  processAddress.js - validates faulty address entry for GeoCode API
 //  getGeoCode.js - uses valid to retrieve geo coordinates from GeoCode API
 //  storeIncident.js - stores incident record with geo coordinates in PostgreSQL db
 //
 // ================================================
 var request = require('request');
-// var incidents = require('./data/fixedData.dat');
-// var raw_incidents = require('./getIncidentData');
 var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
 var db = require('./models');
 var procAddr = require('./processAddress.js');
-
 // var getIncidents = require('./getIncidentData.js');
 
-// [1] (A) getIncidentData.js to get JSON data from Traffic API
+// [1] (A) Get raw data from Traffic API and store in raw_incidents table
+// getIncidents();
 
-// var incidents = getIncidents();
-
-// console.log(db);
 // [2] (J) process for each incident (this file)
+// console.log(db);
+
 db
-  .sequelize.sync({force: true})
+  // .sequelize.sync({force: false})
   // .raw_incident.findAll({ order: '"id" asc', limit: 1, offset: 1000 })
   .raw_incident.findAll({ order: '"id" asc' })
-  // .then(function() {
-    // return raw_incident.findAll({ limit: 10} );
-  // })
+
   .then(function(incidents) {
 
     incidents.forEach(function(incident) {
@@ -48,13 +43,7 @@ db
       // var localTime = convertEpochToLocalTime(epochDateTime);
       // console.log(localTime);  // sanity check
 
-      // [2b] validate address with processAddress.js (possible issues):
-        // blank location - assign to null
-        // remove X's? - probably not necessary
-        // add space before and after "&" and "/" - required
-        // "KAM" needs to be replaced with "KAMEHAMEHA"
-        // "MONALUA FWY" needs to be replaced with "HI-78"
-
+      // [2b] validate address with processAddress.js:
       var addr = procAddr(incident.address);
       // console.log(addr);
 
@@ -135,13 +124,13 @@ db
             });
           });
         }
-        console.log("============================");
+        // console.log("============================");
       });
 
 
     }); // (J) end forEach()
 
-console.log("============================================");
+// console.log("============================================");
 
 });
 
@@ -157,23 +146,3 @@ function convertEpochToLocalTime(utcSeconds) {
   d.setUTCSeconds(utcSeconds);
   return d;  // d holds the date in your local timezone
 }
-
-// preferred, but does not work - object not accessible (undefined) in main space:
-// function getGeoCode(addr) {
-//   // var geo_data;
-//   // var jsonData;
-//   request('http://open.mapquestapi.com/geocoding/v1/address?key='+config.AppKey+'&location='+addr, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       // console.log(body); // sanity check
-//       jsonData = JSON.parse(body);
-//       // console.log(jsonData.results[0].locations[0].latLng.lng);
-//       // console.log(jsonData.results[0].locations[0].latLng.lat);
-//       geo_data = {
-//         "lng": jsonData.results[0].locations[0].latLng.lng, 
-//         "lat": jsonData.results[0].locations[0].latLng.lat
-//       };
-//     }
-//   });
-//   // console.log(geo_data);
-//   return geo_data;
-// }
