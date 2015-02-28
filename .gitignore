@@ -1,6 +1,10 @@
 config.json
-data
+save
+notes
+test
 app.js
+data
+
 # Logs
 logs
 *.log

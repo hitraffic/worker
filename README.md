@@ -5,28 +5,37 @@ Fetches and stores geocoded location data.
 "Work" will provide geo-coordinate data to supplement data provided by Hawaii Open Data for Traffic Incidents, adding the capability to plot map locations.  Data will be stored in a separate database to be utilized by mid and front end developers.
 
 ## Team Members:
+
 A = Andrew
 
 B = Joanne
 
-## Work Modules:
+## Worker Modules:
 
-1) [A] getIncidentData - retrieves JSON data from Traffic API
+1) [A] getIncidentData - retrieves data from Traffic API, converts to a JSON object, creates db model for raw data and inserts data.
 
-2) [J] processAddress - prepares valid address
+2) [J] processAddress - retrieves raw data and prepares valid address.
 
-3) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
+    a) [J] fixDate - converts date from epoch to local
 
-4) [A] storeIncidents - inserts incidents with valid geo coordinates to PostgreSQL database
+    b) [J] processAddress - prepares valid address
 
-## API Data:
-incident_number, date, code, type, address, location, area
+    c) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
 
-Source Data: https://data.honolulu.gov/api/views/INLINE/rows.json?accessType=DOWNLOAD
+    d) [A] storeIncidents - inserts incidents with valid geo coordinates to the database
+    
+3) [A] getRealTimeData - retrieves JSON data from HPD site and stores them on the database daily, and processed by step 2)
 
-Notes: 2 hour delay, over 162,000+ records, dates back to Aug 2012
+5) [J] processIncidents - main program that will emply the first 4 routines.  will also provide date-time conversion.
 
-Source Data: http://www4.honolulu.gov/hpdtraffic/
+## Raw Traffic API Data:
+index, date, code, type, address, location, area
+
+Source Data: https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWNLOAD
+
+Notes: 2 hour delay, over 163,000+ records, dates back to Aug 2012
+
+Source Data: http://www4.honolulu.gov/hpdtraffic/ or https://twitter.com/hpdtraffic
 
 Notes: Real-Time data, requires scrapping (later)
 
@@ -39,19 +48,19 @@ Notes: development using Mac OS X version
 
 Production: (TBD)
 
-### database name: hitraffic (tbd)
+### database name: hitraffic
 
 #### table name: incidents
 
-  index: [PK, INT, AUTO]
+  index: [PK, INT, AUTO INCREMENT, UNIQUE]
 
   number: [INT, over 160,000+]
 
   date: [DATE/TIME]
 
-  code: [INT or code table?]
+  code: [INT]
 
-  type: [STRING or FK to code_index?]
+  type: [STRING]
 
   address: [STRING]
 
@@ -59,12 +68,18 @@ Production: (TBD)
 
   area: [STRING]
 
-  geo_coord: gc_index [FK]
+  lat: [FLOAT]
 
-#### table name: geo_coords
+  lng: [FLOAT]
+  
+Note: postgis.net may provide extensive capability with geography and geometry in the future.
 
-  gc_index: [PK, INT, AUTO]
+#### table name: location
 
-  col: lat [FLOAT]
+#### Area
 
-  col: lng [FLOAT]
+  name: [STRING]
+  
+#### table name: incident_type
+
+#### table name: location_type
