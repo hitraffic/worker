@@ -5,12 +5,12 @@
 // NOTE: changes address to proper format, but address is not guaranteed 
 // to be sufficient for GeoCode API
 
-// module.exports = function(addr) {  // uncomment to activate
+module.exports = function(addr) {  // uncomment to activate
 
   // possible problems:
   // ==================
   // var address = "KAM";               // KAM s/b KAMEHAMEHA
-  var address = "KAMEHAME DR";          // should not change KAMEHAME
+  // var address = "KAMEHAME DR";          // should not change KAMEHAME
 
   // var address = "TEST/TEST";         // slash with no spaces, needs spaces
   // var address = "1/10";              // num slash num, fraction do not change
@@ -29,14 +29,13 @@
   // var address = "MOANALUA FWY";       // both FW and FWY exist
   // var address = "E MOANALUA FWY&PUULOA RD";  // 2 problems
 
+  // note: bad addresses can have more than one problem (total=4149+)
+
   // =====================
   // end possible problems                
 
-  // var address = addr; // uncomment to activate
+  var address = addr; // uncomment to activate
   console.log(address);
-  // var validAddress = address;
-
-  // note: bad addresses can have more than one problem (total=4149+)
 
   // contains "KAM" - replace with "KAMEHAMEHA" (qty=1053+)
   if(address.match(/\bKAM\b/)) {
@@ -83,4 +82,4 @@
   console.log(address); 
   return address;
 
-// };  // uncomment to activate
+};  // uncomment to activate
