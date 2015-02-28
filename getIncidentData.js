@@ -2,25 +2,25 @@
 // retrieves raw data from Traffic API
 // converts to JSON data and stores in the hitraffic database
 var request = require('request');
-// var environment = process.env.NODE_ENV || "development";
-// var config = require('./config.json')[environment];
+var environment = process.env.NODE_ENV || "development";
+var config = require('./config.json')[environment];
 var bodyParser = require('body-parser');
 var raw_incident = require('./models/RawIncident.js');
 
 console.log(environment);
 
-// var Sequelize = require('sequelize'),
-//   sequelize = new Sequelize(config.database, config.username, config.password, config);
+var Sequelize = require('sequelize'),
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-// var raw_incident = sequelize.define('raw_incident', {
-//   item: Sequelize.INTEGER,
-//   date: Sequelize.DATE,
-//   code: Sequelize.STRING,
-//   type: Sequelize.STRING,
-//   address: Sequelize.STRING,
-//   location: Sequelize.STRING,
-//   area: Sequelize.STRING
-// });
+var raw_incident = sequelize.define('raw_incident', {
+  item: Sequelize.INTEGER,
+  date: Sequelize.DATE,
+  code: Sequelize.STRING,
+  type: Sequelize.STRING,
+  address: Sequelize.STRING,
+  location: Sequelize.STRING,
+  area: Sequelize.STRING
+});
 
 // module.exports = raw_incident;
 
@@ -31,7 +31,7 @@ request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWN
     var fixedData = jsonData.map(function (record) {
       return {
         "item": record[0],
-        "date": record[8],
+        "date": convertEpochToLocalTime(record[8]),
         "code": record[9],
         "type": record[10],
         "address": record[11],
@@ -64,3 +64,8 @@ request('https://data.honolulu.gov/api/views/ix32-iw26/rows.json?accessType=DOWN
 });
 
 
+function convertEpochToLocalTime(utcSeconds) {
+  var d = new Date(0); // 0 is the key which sets the date to the epoch
+  d.setUTCSeconds(utcSeconds);
+  return d;  // d holds the date in your local timezone
+}

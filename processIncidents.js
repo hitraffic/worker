@@ -18,6 +18,7 @@ var request = require('request');
 var environment = process.env.NODE_ENV || "development";
 var config = require('./config.json')[environment];
 var db = require('./models');
+var procAddr = require('./processAddress.js');
 
 // var getIncidents = require('./getIncidentData.js');
 
@@ -28,20 +29,23 @@ var db = require('./models');
 // console.log(db);
 // [2] (J) process for each incident (this file)
 db
-  // .sequelize.sync({force: true})
-  .raw_incident.findAll({ limit: 500, offset: 1000 })
+  .sequelize.sync({force: true})
+  // .raw_incident.findAll({ order: '"id" asc', limit: 1, offset: 1000 })
+  .raw_incident.findAll({ order: '"id" asc' })
   // .then(function() {
     // return raw_incident.findAll({ limit: 10} );
   // })
   .then(function(incidents) {
 
     incidents.forEach(function(incident) {
+      // console.log(incident);
 
       // [2a] convert stored epoch time to local time
+      // NOTE: this is being handled in getIncidentData.js
       // TODO: need to actually change incident date
       // TODO: need to remove day of week and "GMT-1000 (HST)""
-      var epochDateTime = incident.date;
-      var localTime = convertEpochToLocalTime(epochDateTime);
+      // var epochDateTime = incident.date;
+      // var localTime = convertEpochToLocalTime(epochDateTime);
       // console.log(localTime);  // sanity check
 
       // [2b] validate address with processAddress.js (possible issues):
@@ -51,7 +55,7 @@ db
         // "KAM" needs to be replaced with "KAMEHAMEHA"
         // "MONALUA FWY" needs to be replaced with "HI-78"
 
-      var addr = incident.address;
+      var addr = procAddr(incident.address);
       // console.log(addr);
 
       // [2c] get geo coordinates from GeoCode API
@@ -62,7 +66,7 @@ db
           var latitude;
           var longitude;
 
-          console.log(addr);  // sanity check
+          // console.log(addr);  // sanity check
 
           if (jsonData && 
               jsonData.results[0] &&
@@ -70,12 +74,13 @@ db
               jsonData.results[0].locations[0].latLng &&
               jsonData.results[0].locations[0].latLng.lng && 
               jsonData.results[0].locations[0].latLng.lat) {
-            console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
-            console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
+            // console.log("lng: " + jsonData.results[0].locations[0].latLng.lng);
+            // console.log("lat: " + jsonData.results[0].locations[0].latLng.lat);
+
             latitude = jsonData.results[0].locations[0].latLng.lat;
             longitude = jsonData.results[0].locations[0].latLng.lng;
           } else {
-            console.log("***** Problem address: " + addr);
+            // console.log("***** Problem address: " + addr);
             latitude = null;
             longitude = null;
           }
@@ -102,11 +107,12 @@ db
             where: areaData,
             defaults: areaData
           })
-          .then(function(area) {
+          .spread(function(area) {
             return  db.Location.findOrCreate({
               where: locationData,
               defaults: locationData
-            }).then(function(location) {
+            }).spread(function(location) {
+              // console.log(location);
               location.setArea(area);
               return location;
             });
@@ -116,10 +122,11 @@ db
               where: incidentTypeData,
               defaults: incidentTypeData
             })
-            .then(function(incidentType) {
+            .spread(function(incidentType) {
               return db.Incident.create({
                 item: incident.item,
-                date: localTime
+                // date: localTime
+                date: incident.date
               }).then(function(incident) {
                 incident.setLocation(location);
                 incident.setIncidentType(incidentType);
