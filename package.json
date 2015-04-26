@@ -1,0 +1,25 @@
+{
+  "name": "hitraffic-worker",
+  "version": "1.0.0",
+  "description": "Worker process for HITraffic",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-node index.js"
+  },
+  "engines": {
+    "iojs": "1.7.x"
+  },
+  "author": "George Lee",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.1.10",
+    "cheerio": "^0.19.0",
+    "moment": "^2.10.2",
+    "mongoose": "^4.0.1",
+    "request": "^2.55.0"
+  },
+  "devDependencies": {
+    "dotenv": "^1.1.0"
+  }
+}

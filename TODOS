@@ -1,0 +1,32 @@
+TODOS
+
+* Write geocoder
+* Create build process for compiling node app.
+
+// Valid data
+
+{ latLng: { lng: -157.851661, lat: 21.309729 },
+  adminArea4: 'Oahu County',
+  adminArea5Type: 'City',
+  adminArea4Type: 'County',
+  adminArea5: 'Honolulu',
+  street: 'Magellan Avenue',
+  adminArea1: 'US',
+  adminArea3: 'HI',
+  type: 's',
+  displayLatLng: { lng: -157.851661, lat: 21.309729 },
+  linkId: 0,
+  postalCode: '96813',
+  sideOfStreet: 'N',
+  dragPoint: false,
+  adminArea1Type: 'Country',
+  geocodeQuality: 'STREET',
+  geocodeQualityCode: 'B2XAA',
+  mapUrl: 'http://open.mapquestapi.com/staticmap/v4/getmap?key=Fmjtd|luur2h0yng,ag=o5-9wbs1u&type=map&size=225,160&pois=purple-1,21.3097289,-157.8516614,0,0|&center=21.3097289,-157.8516614&zoom=15&rand=694079653',
+  adminArea3Type: 'State' }
+
+{ date: Sat Apr 18 2015 10:58:27 GMT-1000 (HST),
+    incidentType: 'MOTOR VEHICLE COLLISION - TOWED',
+    address: '12X H1E FWY',
+    location: 'H1E KAONOHI OP',
+    area: 'AIEA' },
