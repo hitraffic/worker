@@ -1,14 +1,7 @@
-config.json
-save
-notes
-test
-app.js
-data
-
 # Logs
 logs
 *.log
-  
+
 # Runtime data
 pids
 *.pid
@@ -34,3 +27,4 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+.env
