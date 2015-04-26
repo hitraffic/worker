@@ -11,7 +11,7 @@ var incidentSchema = new Schema({
     latitude: Number,
     longitude: Number
   },
-  created_at: {type: Date, default: Date.now }
+  created_at: {type: Date, default: Date.now },
   // Don't want to tie this to a specific schema yet.
   geocode_response: Schema.Types.Mixed
 });

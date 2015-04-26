@@ -43,15 +43,20 @@ function scrapeData() {
   });
 }
 
-function reprocessData() {
-  return new Promise((resolve, reject) => {
-    Incident.find({geocode_response: null}, (err, incidents) => {
-      return Promise.all(incidents.map((incident) => geocodeData(incident).then(updateData)));
-    });
+function reprocessData(query={}) {
+  query.geocode_data = null;
+
+  return Incident.find(query).then((incidents) => {
+    return Promise.all(incidents.map((incident) => geocodeData(incident).then(updateData)));
   });
-};
+}
+
+function getUnprocessedData() {
+  return Incident.ungeocodedIncidents();
+}
 
 module.exports = {
   scrapeData,
-  reprocessData
+  reprocessData,
+  getUnprocessedData,
 };
