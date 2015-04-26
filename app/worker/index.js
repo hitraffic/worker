@@ -6,7 +6,7 @@ let MapQuest = geocoders.MapQuest;
 let geocoder = new MapQuest(process.env.MAPQUEST_API_KEY);
 
 function geocodeData(data) {
-  return geocoder.geocode(data.address).then((response) => {
+  return geocoder.geocode(data.address, data.location).then((response) => {
     data.geocode_response = response;
     if (response) {
       data.geometry = {
@@ -44,8 +44,6 @@ function scrapeData() {
 }
 
 function reprocessData(query={}) {
-  query.geocode_data = null;
-
   return Incident.find(query).then((incidents) => {
     return Promise.all(incidents.map((incident) => geocodeData(incident).then(updateData)));
   });
