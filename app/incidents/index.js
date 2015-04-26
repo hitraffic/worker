@@ -11,6 +11,7 @@ var incidentSchema = new Schema({
     latitude: Number,
     longitude: Number
   },
+  created_at: {type: Date, default: Date.now }
   // Don't want to tie this to a specific schema yet.
   geocode_response: Schema.Types.Mixed
 });
@@ -22,5 +23,13 @@ incidentSchema.statics.newestIncident = function() {
     });
   });
 };
+
+incidentSchema.statics.ungeocodedIncidents = function() {
+  return new Promise ((resolve, reject) => {
+    this.find({geocode_response: null}, (err, incidents) => {
+      err ? reject(new Error(err)) : resolve(incidents);
+    });
+  });
+}
 
 module.exports = mongoose.model('Incident', incidentSchema);
