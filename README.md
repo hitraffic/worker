@@ -1,8 +1,17 @@
 # hitraffic-worker
 
 [![Join the chat at https://gitter.im/hitraffic/worker](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hitraffic/worker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Fetches and stores geocoded location data.
 "Work" will provide geo-coordinate data to supplement data provided by Hawaii Open Data for Traffic Incidents, adding the capability to plot map locations.  Data will be stored in a separate database to be utilized by mid and front end developers.
+
+## Development:
+
+* Clone this repository.
+* `npm install`
+* Get a MapQuest API key from http://developer.mapquest.com/
+* Create a .env file. An example one is provided in .env.example.
+* Run `npm start` to run the scraper.
 
 ## Team Members:
 
@@ -23,7 +32,7 @@ B = Joanne
     c) [J] getGeoCodes - provides valid address to Geo Code API to retrieve geo coordinates (lat=latitude, lng=longitude)
 
     d) [A] storeIncidents - inserts incidents with valid geo coordinates to the database
-    
+
 3) [A] getRealTimeData - retrieves JSON data from HPD site and stores them on the database daily, and processed by step 2)
 
 5) [J] processIncidents - main program that will emply the first 4 routines.  will also provide date-time conversion.
@@ -71,7 +80,7 @@ Production: (TBD)
   lat: [FLOAT]
 
   lng: [FLOAT]
-  
+
 Note: postgis.net may provide extensive capability with geography and geometry in the future.
 
 #### table name: location
@@ -79,7 +88,7 @@ Note: postgis.net may provide extensive capability with geography and geometry i
 #### Area
 
   name: [STRING]
-  
+
 #### table name: incident_type
 
 #### table name: location_type
