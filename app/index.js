@@ -21,7 +21,7 @@ function main() {
   else if (process.argv.length > 2 && process.argv[2] === 'run') {
     setInterval(() => {
       worker.scrapeData().then(incidents => {
-        console.log(`Geocoded ${incidents.length} incidents`);
+        console.log(`[${new Date()}] Geocoded ${incidents.length} incidents`);
       });
     }, 60000);
   }
