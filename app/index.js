@@ -23,7 +23,7 @@ function main() {
       worker.scrapeData().then(incidents => {
         console.log(`Geocoded ${incidents.length} incidents`);
       });
-    });
+    }, 60000);
   }
 
   else {
