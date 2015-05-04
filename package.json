@@ -4,9 +4,10 @@
   "description": "Worker process for HITraffic",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node index.js",
-    "ungeocoded": "babel-node index.js ungeocoded"
+    "test": "mocha --compilers js:babel/register",
+    "start": "node index.js",
+    "ungeocoded": "node index.js ungeocoded",
+    "forever": "node index.js run"
   },
   "engines": {
     "iojs": "1.7.x"
