@@ -1,2 +1,2 @@
-require('babel/require');
+require('babel/register');
 require('./app')();
