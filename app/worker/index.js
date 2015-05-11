@@ -39,6 +39,7 @@ function scrapeData() {
       incidents = incidents.filter((incident) => incident.date > newest.date);
     }
 
+    console.log(`Scraped ${incidents.length} incidents`);
     return Promise.all(incidents.map((incident) => geocodeData(incident).then(saveData)));
   });
 }
