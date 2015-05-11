@@ -20,9 +20,10 @@ MapQuest.prototype.geocode = function (address, location) {
     let uri = `${GEOCODE_BASE_URL}?key=${this.key}&street=${address}&county=Oahu&state=HI`;
 
     request({uri, json: true}, (err, _, response) => {
-      // If there is a location, then we were successful.
+      // There should be a location at the county level.
       if (response.results[0].locations.length > 0) {
-        resolve(response.results[0].locations[0]);
+        let location = response.results[0].locations[0];
+        (location.geocodeQuality === 'STREET') ? resolve(location) : resolve(null);
       }
       else {
         // Let's just resolve this for now. Not really an error yet.
