@@ -1,3 +1,5 @@
+'use strict';
+
 let scraper = require('../scraper');
 let geocoders = require('../geocoders');
 let Incident = require('../incidents');
@@ -36,17 +38,17 @@ function scrapeData() {
 
   return Promise.all(promises).then(([incidents, newest]) => {
     if (newest) {
-      incidents = incidents.filter((incident) => incident.date > newest.date);
+      incidents = incidents.filter(incident => incident.date > newest.date);
     }
 
     console.log(`Scraped ${incidents.length} incidents`);
-    return Promise.all(incidents.map((incident) => geocodeData(incident).then(saveData)));
+    return Promise.all(incidents.map(incident => geocodeData(incident).then(saveData)));
   });
 }
 
 function reprocessData(query={}) {
-  return Incident.find(query).then((incidents) => {
-    return Promise.all(incidents.map((incident) => geocodeData(incident).then(updateData)));
+  return Incident.find(query).then(incidents => {
+    return Promise.all(incidents.map(incident => geocodeData(incident).then(updateData)));
   });
 }
 
