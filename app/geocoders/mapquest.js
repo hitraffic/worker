@@ -21,7 +21,7 @@ MapQuest.prototype.geocode = function (address, location) {
 
     request({uri, json: true}, (err, _, response) => {
       // There should be a location at the county level.
-      if (response.results[0].locations.length > 0) {
+      if (response.results && response.results[0].locations.length > 0) {
         let location = response.results[0].locations[0];
         (location.geocodeQuality === 'STREET') ? resolve(location) : resolve(null);
       }
